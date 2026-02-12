@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>TIPIKOR - Single Page Reporting Portal</title>
+<title>TIPIDKOR - Single Page Reporting Portal</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
@@ -50,7 +50,7 @@
 <span class="material-icons text-white text-xl">gavel</span>
 </div>
 <div>
-<h1 class="text-lg font-bold tracking-tight text-primary leading-none">TIPIKOR <span class="text-slate-500 font-normal">| Portal</span></h1>
+<h1 class="text-lg font-bold tracking-tight text-primary leading-none">TIPIDKOR <span class="text-slate-500 font-normal">| Portal</span></h1>
 <p class="text-[10px] text-slate-400 uppercase tracking-widest leading-none mt-1">Anti-Corruption Reporting System</p>
 </div>
 </div>
@@ -235,7 +235,7 @@
 </div>
 </main>
 <footer class="mt-12 py-8 text-center border-t border-slate-200 dark:border-slate-800">
-<p class="text-xs text-slate-400">© 2024 TIPIKOR Whistleblower Protection Portal. All rights reserved.</p>
+<p class="text-xs text-slate-400">© 2024 TIPIDKOR Whistleblower Protection Portal. All rights reserved.</p>
 <div class="mt-2 flex justify-center space-x-4">
 <a class="text-[11px] text-primary hover:underline font-medium" href="#">Kebijakan Privasi</a>
 <a class="text-[11px] text-primary hover:underline font-medium" href="#">Syarat &amp; Ketentuan</a>

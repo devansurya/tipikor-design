@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'TIPIKOR - Sistem Pengaduan Tindak Pidana Korupsi')
+@section('title', 'TIPIDKOR - Sistem Pengaduan Tindak Pidana Korupsi')
 
 @section('content')
     {{-- Hero Section --}}
@@ -35,7 +35,7 @@
                 <div class="bg-white border border-slate-200/60 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex items-start space-x-4">
                         <div class="bg-primary/10 p-2.5 rounded-lg flex-shrink-0">
-                            <span class="material-icons text-primary">shield_lock</span>
+                            <span class="material-icons text-primary">lock</span>
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-900 mb-1">Kerahasiaan Terjamin</h3>
@@ -59,7 +59,7 @@
                 <div class="bg-white border border-slate-200/60 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex items-start space-x-4">
                         <div class="bg-primary/10 p-2.5 rounded-lg flex-shrink-0">
-                            <span class="material-icons text-primary">monitoring</span>
+                            <span class="material-icons text-primary">monitor</span>
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-900 mb-1">Proses Transparan</h3>

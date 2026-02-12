@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Pengaduan - TIPIKOR')
+@section('title', 'Buat Pengaduan - TIPIDKOR')
 
 @section('content')
 <div class="max-w-6xl mx-auto px-4 py-6">
@@ -218,7 +218,7 @@
                                 <option value="gratifikasi">Gratifikasi</option>
                                 <option value="mark-up">Mark-up</option>
                                 <option value="sunset-fee">Sunset Fee</option>
-                                <option value="konflik-interest">Konflik of Interest</option>
+                                <option value="konflik-interest">Conflict of Interest</option>
                                 <option value="penggelapan">Penggelapan</option>
                                 <option value="penyalahgunaan-wewenang">Penyalahgunaan Wewenang</option>
                                 <option value="pencucian-uang">Pencucian Uang</option>
@@ -445,23 +445,28 @@
     function handleFiles(files) {
         for (let file of files) {
             const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+            const sizeLabel = sizeMB > 1 ? sizeMB + ' MB' : (file.size / 1024).toFixed(0) + ' KB';
             let icon = 'description';
             if (file.type.includes('pdf')) icon = 'picture_as_pdf';
             else if (file.type.includes('image')) icon = 'image';
             else if (file.type.includes('audio')) icon = 'audio_file';
             else if (file.type.includes('video')) icon = 'video_file';
 
+            const idx = fileList.children.length;
             const item = document.createElement('div');
-            item.className = 'flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-3 py-2';
+            item.className = 'bg-slate-50 border border-slate-200 rounded-lg p-3';
             item.innerHTML = `
-                <div class="flex items-center space-x-2">
-                    <span class="material-icons text-primary text-[18px]">${icon}</span>
-                    <span class="text-sm text-slate-700">${file.name}</span>
-                    <span class="text-[11px] text-slate-400">${sizeMB > 1 ? sizeMB + ' MB' : (file.size / 1024).toFixed(0) + ' KB'}</span>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-2 min-w-0">
+                        <span class="material-icons text-primary text-[20px] flex-shrink-0">${icon}</span>
+                        <span class="text-sm font-medium text-slate-700 truncate">${file.name}</span>
+                        <span class="text-[11px] text-slate-400 flex-shrink-0">${sizeLabel}</span>
+                    </div>
+                    <button type="button" class="text-red-400 hover:text-red-600 transition-colors flex-shrink-0 ml-2" onclick="this.closest('.bg-slate-50').remove()">
+                        <span class="material-icons text-[18px]">close</span>
+                    </button>
                 </div>
-                <button type="button" class="text-red-400 hover:text-red-600 transition-colors" onclick="this.parentElement.remove()">
-                    <span class="material-icons text-[18px]">close</span>
-                </button>
+                <input type="text" name="deskripsi_bukti[${idx}]" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md text-xs text-slate-600 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all" placeholder="Jelaskan isi/maksud file ini, contoh: Bukti transfer dana proyek...">
             `;
             fileList.appendChild(item);
         }
