@@ -11,6 +11,9 @@
             <div class="mb-6">
                 <h2 class="text-2xl font-bold text-slate-900">Formulir Pengaduan Tindak Pidana Korupsi</h2>
                 <p class="text-slate-500 text-sm">Mohon isi informasi di bawah ini dengan lengkap dan jujur. Kerahasiaan Anda terjamin.</p>
+                <div class="mt-4 p-4 bg-primary/5 border-l-4 border-primary rounded-r-lg">
+                    <p class="text-sm font-medium text-slate-700">🛡️ Laporkan dugaan korupsi dengan aman. Identitas Anda dapat dirahasiakan.</p>
+                </div>
             </div>
 
             <form action="#" method="POST" enctype="multipart/form-data" id="formPengaduan">
@@ -46,7 +49,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="identitasFields">
                         <div class="space-y-1">
                             <label class="form-label-tw">Nama <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
-                            <input type="text" class="input-field" id="nama" name="nama" placeholder="Kosongkan jika ingin anonim">
+                            <input type="text" class="input-field" id="nama" name="nama" placeholder="Masukkan nama Anda">
                         </div>
                         <div class="space-y-1">
                             <label class="form-label-tw">Kontak / Email <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
@@ -72,9 +75,15 @@
                     <div class="space-y-4">
                         {{-- Ringkasan --}}
                         <div class="space-y-1">
-                            <label class="form-label-tw">Ringkasan Pengaduan <span class="text-red-500">*</span> <span class="font-normal normal-case text-slate-400">(maks. 150 karakter)</span></label>
-                            <textarea class="input-field resize-none" id="ringkasan" name="ringkasan" rows="2" maxlength="150" placeholder="Jelaskan secara singkat dugaan tindak pidana korupsi..."></textarea>
-                            <div class="text-right text-[10px] text-slate-400"><span id="charCount">0</span> / 150</div>
+                            <label class="form-label-tw">Ringkasan Pengaduan <span class="text-red-500">*</span> <span class="font-normal normal-case text-slate-400">(maks. 250 karakter)</span></label>
+                            <textarea class="input-field resize-none" id="ringkasan" name="ringkasan" rows="2" maxlength="250" placeholder="Jelaskan secara singkat dugaan tindak pidana korupsi..."></textarea>
+                            <div class="text-right text-[10px] text-slate-400"><span id="charCount">0</span> / 250</div>
+                        </div>
+
+                        {{-- Uraian Lengkap --}}
+                        <div class="space-y-1">
+                            <label class="form-label-tw">Uraian Lengkap <span class="text-red-500">*</span> <span class="font-normal normal-case text-slate-400">(Jelaskan kronologi, siapa, kapan, bagaimana)</span></label>
+                            <textarea class="input-field resize-none" id="uraian_lengkap" name="uraian_lengkap" rows="6" placeholder="Tuliskan detail kejadian secara lengkap, termasuk kronologi, pelaku yang terlibat, cara kejadian berlangsung, dan informasi lain yang relevan..."></textarea>
                         </div>
 
                         {{-- Waktu & Jumlah Pihak --}}
@@ -84,15 +93,21 @@
                                 <input type="date" class="input-field" id="waktu_kejadian" name="waktu_kejadian">
                             </div>
                             <div class="space-y-1">
-                                <label class="form-label-tw">Jumlah Pihak Terlibat</label>
-                                <select class="input-field-select" id="jumlah_pihak" name="jumlah_pihak">
-                                    <option value="" selected disabled>Pilih jumlah...</option>
-                                    <option value="1">1 orang</option>
-                                    <option value="2-5">2-5 orang</option>
-                                    <option value="6-10">6-10 orang</option>
-                                    <option value=">10">Lebih dari 10 orang</option>
-                                    <option value="tidak_tahu">Tidak tahu</option>
-                                </select>
+                                <label class="form-label-tw">Apakah melibatkan lebih dari satu orang?</label>
+                                <div class="flex flex-wrap gap-4 mt-2">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="radio" name="jumlah_pihak" value="ya" class="rounded-full text-primary focus:ring-primary border-slate-300">
+                                        <span class="ml-2 text-sm text-slate-600">Ya</span>
+                                    </label>
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="radio" name="jumlah_pihak" value="tidak" class="rounded-full text-primary focus:ring-primary border-slate-300">
+                                        <span class="ml-2 text-sm text-slate-600">Tidak</span>
+                                    </label>
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="radio" name="jumlah_pihak" value="tidak_tahu" checked class="rounded-full text-primary focus:ring-primary border-slate-300">
+                                        <span class="ml-2 text-sm text-slate-600">Tidak Tahu</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
@@ -156,27 +171,34 @@
                             </div>
                         </div>
 
-                        {{-- Media Sosial Terlapor --}}
+                        {{-- Media Sosial Terlapor (Collapsible) --}}
                         <div>
-                            <label class="form-label-tw">Media Sosial Terlapor <span class="font-normal normal-case text-slate-400">(Opsional — untuk membantu identifikasi)</span></label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-1">
-                                <div class="flex">
-                                    <span class="inline-flex items-center px-3 bg-slate-100 border border-r-0 border-slate-200 rounded-l-lg">
-                                        <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                                    </span>
-                                    <input type="text" class="input-field !rounded-l-none" id="sosmed_instagram" name="sosmed_instagram" placeholder="@username">
-                                </div>
-                                <div class="flex">
-                                    <span class="inline-flex items-center px-3 bg-slate-100 border border-r-0 border-slate-200 rounded-l-lg">
-                                        <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                                    </span>
-                                    <input type="text" class="input-field !rounded-l-none" id="sosmed_facebook" name="sosmed_facebook" placeholder="Nama profil / URL">
-                                </div>
-                                <div class="flex">
-                                    <span class="inline-flex items-center px-3 bg-slate-100 border border-r-0 border-slate-200 rounded-l-lg">
-                                        <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                                    </span>
-                                    <input type="text" class="input-field !rounded-l-none" id="sosmed_x" name="sosmed_x" placeholder="@username">
+                            <button type="button" class="flex items-center text-sm text-slate-600 hover:text-primary transition-colors" onclick="document.getElementById('sosmedFields').classList.toggle('hidden'); this.querySelector('.material-icons').textContent = this.querySelector('.material-icons').textContent === 'expand_more' ? 'expand_less' : 'expand_more';">
+                                <span class="material-icons text-[18px] mr-1">expand_more</span>
+                                <span class="font-medium">Tambahkan informasi media sosial terlapor</span>
+                                <span class="ml-2 text-[11px] text-slate-400">(Opsional)</span>
+                            </button>
+                            <div id="sosmedFields" class="hidden mt-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                <label class="form-label-tw mb-3">Media Sosial Terlapor <span class="font-normal normal-case text-slate-400">(untuk membantu identifikasi)</span></label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div class="flex">
+                                        <span class="inline-flex items-center px-3 bg-white border border-r-0 border-slate-200 rounded-l-lg">
+                                            <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                                        </span>
+                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_instagram" name="sosmed_instagram" placeholder="@username">
+                                    </div>
+                                    <div class="flex">
+                                        <span class="inline-flex items-center px-3 bg-white border border-r-0 border-slate-200 rounded-l-lg">
+                                            <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                        </span>
+                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_facebook" name="sosmed_facebook" placeholder="Nama profil / URL">
+                                    </div>
+                                    <div class="flex">
+                                        <span class="inline-flex items-center px-3 bg-white border border-r-0 border-slate-200 rounded-l-lg">
+                                            <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                        </span>
+                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_x" name="sosmed_x" placeholder="@username">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -215,16 +237,24 @@
                             <label class="form-label-tw">Jenis Dugaan <span class="text-red-500">*</span></label>
                             <select class="w-full" id="jenisDugaan" name="jenis_dugaan[]" multiple="multiple">
                                 <option value="suap">Suap</option>
-                                <option value="gratifikasi">Gratifikasi</option>
-                                <option value="mark-up">Mark-up</option>
-                                <option value="sunset-fee">Sunset Fee</option>
-                                <option value="konflik-interest">Conflict of Interest</option>
+                                <option value="gratifikasi" data-tooltip="Pemberian hadiah terkait jabatan">Gratifikasi</option>
+                                <option value="mark-up" data-tooltip="Menaikkan harga/nilai proyek">Mark-up</option>
+                                <option value="sunset-fee" data-tooltip="Imbalan setelah proyek selesai">Sunset Fee</option>
+                                <option value="konflik-interest" data-tooltip="Kepentingan pribadi dalam keputusan jabatan">Conflict of Interest</option>
                                 <option value="penggelapan">Penggelapan</option>
                                 <option value="penyalahgunaan-wewenang">Penyalahgunaan Wewenang</option>
                                 <option value="pencucian-uang">Pencucian Uang</option>
                                 <option value="pemerasan">Pemerasan</option>
-                                <option value="nepotisme">Nepotisme</option>
+                                <option value="nepotisme" data-tooltip="Mengutamakan keluarga/kerabat dalam jabatan">Nepotisme</option>
                             </select>
+                            <div class="mt-2 text-[11px] text-slate-500 bg-blue-50 p-2 rounded border border-blue-100">
+                                <span class="font-semibold">💡 Penjelasan singkat:</span>
+                                <span class="font-medium text-blue-700">Gratifikasi</span> = Hadiah terkait jabatan,
+                                <span class="font-medium text-blue-700">Mark-up</span> = Menaikkan harga proyek,
+                                <span class="font-medium text-blue-700">Sunset Fee</span> = Imbalan setelah proyek selesai,
+                                <span class="font-medium text-blue-700">Conflict of Interest</span> = Kepentingan pribadi dalam keputusan,
+                                <span class="font-medium text-blue-700">Nepotisme</span> = Mengutamakan keluarga/kerabat
+                            </div>
                         </div>
 
                         {{-- Anggaran & Sumber Dana --}}
@@ -233,11 +263,11 @@
                                 <label class="form-label-tw">Terkait Anggaran?</label>
                                 <div class="flex gap-4 mt-1">
                                     <label class="inline-flex items-center cursor-pointer">
-                                        <input type="radio" name="terkait_anggaran" value="ya" checked class="rounded-full text-primary focus:ring-primary border-slate-300">
+                                        <input type="radio" name="terkait_anggaran" value="ya" class="rounded-full text-primary focus:ring-primary border-slate-300">
                                         <span class="ml-2 text-sm text-slate-600">Ya</span>
                                     </label>
                                     <label class="inline-flex items-center cursor-pointer">
-                                        <input type="radio" name="terkait_anggaran" value="tidak" class="rounded-full text-primary focus:ring-primary border-slate-300">
+                                        <input type="radio" name="terkait_anggaran" value="tidak" checked class="rounded-full text-primary focus:ring-primary border-slate-300">
                                         <span class="ml-2 text-sm text-slate-600">Tidak</span>
                                     </label>
                                 </div>
@@ -262,7 +292,7 @@
                         </div>
 
                         {{-- Detail Anggaran --}}
-                        <div id="anggaranFields">
+                        <div id="anggaranFields" style="display:none;">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="space-y-1">
                                     <label class="form-label-tw">Proyek / Kegiatan <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
@@ -297,6 +327,13 @@
                         <h3 class="font-bold text-slate-900">4. Bukti Pendukung</h3>
                     </div>
 
+                    <div class="mb-3 p-3 bg-green-50 rounded-lg border border-green-200 flex items-start space-x-2">
+                        <span class="material-icons text-green-600 text-[18px] mt-0.5">check_circle</span>
+                        <p class="text-[12px] text-green-700">
+                            <strong>Jika tidak memiliki bukti, Anda tetap dapat mengirim laporan.</strong> Bukti pendukung akan memperkuat investigasi, namun tidak wajib.
+                        </p>
+                    </div>
+
                     <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-primary transition-colors group cursor-pointer" id="uploadArea">
                         <span class="material-icons text-3xl text-slate-300 group-hover:text-primary mb-2">upload_file</span>
                         <p class="text-sm font-medium text-slate-600">Klik untuk unggah atau seret file ke sini</p>
@@ -309,9 +346,12 @@
 
                 {{-- Submit --}}
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 pt-6 border-t border-slate-200">
-                    <div class="flex items-center space-x-2">
-                        <input type="checkbox" class="rounded text-primary focus:ring-primary border-slate-300" id="terms">
-                        <label class="text-xs text-slate-500" for="terms">Saya menyatakan bahwa informasi ini benar dan dapat dipertanggungjawabkan.</label>
+                    <div class="flex items-start space-x-2">
+                        <input type="checkbox" class="rounded text-primary focus:ring-primary border-slate-300 mt-0.5" id="terms">
+                        <label class="text-xs text-slate-500" for="terms">
+                            Saya menyatakan bahwa informasi ini benar dan dapat dipertanggungjawabkan. 
+                            <a href="#" onclick="event.preventDefault(); showProtectionPolicy();" class="text-primary hover:underline font-medium">Baca kebijakan perlindungan pelapor</a>
+                        </label>
                     </div>
                     <div class="flex gap-3">
                         <button type="button" class="px-6 py-2.5 border border-slate-300 text-slate-600 rounded-lg font-medium text-sm hover:bg-slate-50 transition-colors" onclick="document.getElementById('formPengaduan').reset();">
@@ -413,6 +453,35 @@
         charCount.textContent = this.value.length;
     });
 
+    // Toggle identitas fields berdasarkan jenis identitas
+    document.querySelectorAll('input[name="jenis_identitas"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            const identitasFields = document.getElementById('identitasFields');
+            const namaInput = document.getElementById('nama');
+            const kontakInput = document.getElementById('kontak');
+            
+            if (this.value === 'anonim') {
+                identitasFields.style.display = 'none';
+                namaInput.removeAttribute('required');
+                kontakInput.removeAttribute('required');
+            } else {
+                identitasFields.style.display = 'grid';
+                if (this.value === 'terbuka') {
+                    namaInput.setAttribute('required', 'required');
+                    kontakInput.setAttribute('required', 'required');
+                }
+            }
+        });
+    });
+
+    // Set initial state - hide fields if anonim is checked
+    document.addEventListener('DOMContentLoaded', function() {
+        const anonimRadio = document.querySelector('input[name="jenis_identitas"][value="anonim"]');
+        if (anonimRadio && anonimRadio.checked) {
+            document.getElementById('identitasFields').style.display = 'none';
+        }
+    });
+
     // Toggle anggaran fields
     document.querySelectorAll('input[name="terkait_anggaran"]').forEach(function(radio) {
         radio.addEventListener('change', function() {
@@ -426,6 +495,57 @@
             document.getElementById('sumberLainnyaField').style.display = this.value === 'lainnya' ? 'block' : 'none';
         });
     });
+
+    // Modal untuk kebijakan perlindungan
+    function showProtectionPolicy() {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl">
+                <div class="sticky top-0 bg-white border-b border-slate-200 p-6 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900">Kebijakan Perlindungan Pelapor</h3>
+                    <button onclick="this.closest('.fixed').remove()" class="text-slate-400 hover:text-slate-600">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4 text-sm text-slate-600 leading-relaxed">
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2">🛡️ Perlindungan Hukum</h4>
+                        <p>Identitas Anda dilindungi berdasarkan <strong>UU No. 31 Tahun 1999</strong> tentang Pemberantasan Tindak Pidana Korupsi dan program perlindungan saksi dan pelapor (whistleblower) dari Lembaga Perlindungan Saksi dan Korban (LPSK).</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2">🔒 Kerahasiaan Data</h4>
+                        <p>Semua data yang Anda kirimkan dienkripsi menggunakan teknologi SSL/TLS dan disimpan dalam server yang aman dan terisolasi. Akses data hanya diberikan kepada tim investigator yang berwenang.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2">✅ Hak Pelapor</h4>
+                        <ul class="list-disc list-inside space-y-1 ml-2">
+                            <li>Mendapat perlindungan hukum dari ancaman, kekerasan, atau intimidasi</li>
+                            <li>Kerahasiaan identitas dijamin jika memilih anonim atau rahasia</li>
+                            <li>Mendapat update status investigasi (jika memberikan kontak)</li>
+                            <li>Bebas dari tuntutan hukum atas laporan yang dibuat dengan itikad baik</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2">⚠️ Tanggung Jawab Pelapor</h4>
+                        <p>Laporan yang dibuat harus berdasarkan fakta dan dapat dipertanggungjawabkan. Laporan palsu atau fitnah dapat dikenakan sanksi hukum sesuai peraturan yang berlaku.</p>
+                    </div>
+                    <div class="bg-primary/5 p-4 rounded-lg border border-primary/20">
+                        <p class="text-primary font-medium">Dengan mengirim laporan, Anda menyetujui bahwa informasi yang diberikan adalah benar dan dapat digunakan untuk keperluan investigasi sesuai dengan ketentuan hukum yang berlaku.</p>
+                    </div>
+                </div>
+                <div class="sticky bottom-0 bg-slate-50 p-4 border-t border-slate-200">
+                    <button onclick="this.closest('.fixed').remove()" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors">
+                        Saya Mengerti
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.remove();
+        });
+    }
 
     // File upload
     const uploadArea = document.getElementById('uploadArea');
