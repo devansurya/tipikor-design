@@ -280,6 +280,7 @@
                             <label class="form-label-tw">Jenis Dugaan <span class="text-red-500">*</span></label>
                             <select class="input-field-select" id="jenisDugaanSelect" name="jenis_dugaan">
                             <!-- <select class="w-full" id="jenisDugaan" name="jenis_dugaan[]"> -->
+                                <option value="" selected disabled>Pilih Jenis Dugaan...</option>
                                 <option value="suap">Suap</option>
                                 <option value="gratifikasi" data-tooltip="Pemberian hadiah terkait jabatan">Gratifikasi</option>
                                 <option value="mark-up" data-tooltip="Menaikkan harga/nilai proyek">Mark-up</option>
