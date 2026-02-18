@@ -72,7 +72,7 @@ class PengaduanController extends Controller
             'pernah_dilaporkan'  => 'nullable|in:ya,tidak,tidak_tahu',
 
             // Objek dugaan
-            'jenis_dugaan'       => 'required|array|min:1',
+            'jenis_dugaan'       => 'required|string|min:1',
             'jenis_dugaan.*'     => 'string',
             'terkait_anggaran'   => 'nullable|in:ya,tidak',
             'sumber_dana'        => 'nullable|in:apbn,bumn_bumd,lainnya',
