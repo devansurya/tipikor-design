@@ -8,6 +8,38 @@
 
         {{-- ==================== MAIN FORM (2/3) ==================== --}}
         <div class="flex-grow lg:w-2/3">
+            {{-- Flash Messages --}}
+            @if(session('success'))
+                <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
+                    <span class="material-icons text-green-600 mt-0.5">check_circle</span>
+                    <div>
+                        <p class="text-sm font-semibold text-green-800">Berhasil!</p>
+                        <p class="text-sm text-green-700">{{ session('success') }}</p>
+                    </div>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
+                    <span class="material-icons text-red-600 mt-0.5">error</span>
+                    <div>
+                        <p class="text-sm font-semibold text-red-800">Gagal!</p>
+                        <p class="text-sm text-red-700">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-sm font-semibold text-red-800 mb-2">Mohon perbaiki kesalahan berikut:</p>
+                    <ul class="list-disc list-inside text-sm text-red-700 space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="mb-6">
                 <h2 class="text-2xl font-bold text-slate-900">Formulir Pengaduan Tindak Pidana Korupsi</h2>
                 <p class="text-slate-500 text-sm">Mohon isi informasi di bawah ini dengan lengkap dan jujur. Kerahasiaan Anda terjamin.</p>
@@ -16,7 +48,7 @@
                 </div>
             </div>
 
-            <form action="#" method="POST" enctype="multipart/form-data" id="formPengaduan">
+            <form action="{{ route('pengaduan.store') }}" method="POST" enctype="multipart/form-data" id="formPengaduan">
                 @csrf
 
                 {{-- 1. Identitas Pelapor --}}
@@ -49,11 +81,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="identitasFields">
                         <div class="space-y-1">
                             <label class="form-label-tw">Nama <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
-                            <input type="text" class="input-field" id="nama" name="nama" placeholder="Masukkan nama Anda">
+                            <input type="text" class="input-field" id="nama" name="nama" placeholder="Masukkan nama Anda" value="{{ old('nama') }}">
                         </div>
                         <div class="space-y-1">
                             <label class="form-label-tw">Kontak / Email <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
-                            <input type="text" class="input-field" id="kontak" name="kontak" placeholder="Untuk update status laporan">
+                            <input type="text" class="input-field" id="kontak" name="kontak" placeholder="Untuk update status laporan" value="{{ old('kontak') }}">
                         </div>
                     </div>
 
@@ -75,22 +107,21 @@
                     <div class="space-y-4">
                         {{-- Ringkasan --}}
                         <div class="space-y-1">
-                            <label class="form-label-tw">Ringkasan Pengaduan <span class="text-red-500">*</span> <span class="font-normal normal-case text-slate-400">(maks. 250 karakter)</span></label>
-                            <textarea class="input-field resize-none" id="ringkasan" name="ringkasan" rows="2" maxlength="250" placeholder="Jelaskan secara singkat dugaan tindak pidana korupsi..."></textarea>
-                            <div class="text-right text-[10px] text-slate-400"><span id="charCount">0</span> / 250</div>
+                            <label class="form-label-tw">Judul Pengaduan <span class="text-red-500">*</span> </label>
+                            <input type="text" class="input-field resize-none" id="ringkasan" name="ringkasan" maxlength="250" placeholder="Tuliskan judul pengaduan" value="{{ old('ringkasan') }}">
                         </div>
 
                         {{-- Uraian Lengkap --}}
                         <div class="space-y-1">
                             <label class="form-label-tw">Uraian Lengkap <span class="text-red-500">*</span> <span class="font-normal normal-case text-slate-400">(Jelaskan kronologi, siapa, kapan, bagaimana)</span></label>
-                            <textarea class="input-field resize-none" id="uraian_lengkap" name="uraian_lengkap" rows="6" placeholder="Tuliskan detail kejadian secara lengkap, termasuk kronologi, pelaku yang terlibat, cara kejadian berlangsung, dan informasi lain yang relevan..."></textarea>
+                            <textarea class="input-field resize-none" id="uraian_lengkap" name="uraian_lengkap" rows="6" placeholder="Tuliskan detail kejadian secara lengkap, termasuk kronologi, pelaku yang terlibat, cara kejadian berlangsung, dan informasi lain yang relevan...">{{ old('uraian_lengkap') }}</textarea>
                         </div>
 
                         {{-- Waktu & Jumlah Pihak --}}
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-1">
                                 <label class="form-label-tw">Tanggal Kejadian <span class="text-red-500">*</span></label>
-                                <input type="date" class="input-field" id="waktu_kejadian" name="waktu_kejadian">
+                                <input type="date" class="input-field" id="waktu_kejadian" name="waktu_kejadian" value="{{ old('waktu_kejadian') }}">
                             </div>
                             <div class="space-y-1">
                                 <label class="form-label-tw">Apakah melibatkan lebih dari satu orang?</label>
@@ -151,23 +182,35 @@
                                     <option value="malut">Maluku Utara</option>
                                     <option value="papuabarat">Papua Barat</option>
                                     <option value="papua">Papua</option>
+                                    {{-- <option value="" selected disabled>Pilih Lokasi...</option>
+                                    @forelse($lokasi as $item)
+                                        <option value="{{ $item['Id'] ?? '' }}" @selected(old('lokasi') == ($item['Id'] ?? ''))>
+                                            {{ $item['Value'] ?? $item['Description'] ?? '' }}
+                                        </option>
+                                    @empty
+                                        <option value="" disabled>Data lokasi tidak tersedia</option>
+                                    @endforelse --}}
                                 </select>
                             </div>
                             <div class="space-y-1">
                                 <label class="form-label-tw">Detail Lokasi <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
-                                <input type="text" class="input-field" id="detail_lokasi" name="detail_lokasi" placeholder="Alamat / detail lokasi">
+                                <input type="text" class="input-field" id="detail_lokasi" name="detail_lokasi" placeholder="Alamat / detail lokasi" value="{{ old('detail_lokasi') }}">
                             </div>
                         </div>
 
-                        {{-- Instansi & Jabatan --}}
+                        {{-- Nama & Instansi Terlapor --}}
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-1">
-                                <label class="form-label-tw">Instansi / Nama Terlapor <span class="text-red-500">*</span></label>
-                                <input type="text" class="input-field" id="instansi" name="instansi" placeholder="Nama instansi / individu">
+                                <label class="form-label-tw">Nama Terlapor <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
+                                <input type="text" class="input-field" id="nama_terlapor" name="nama_terlapor" placeholder="Nama individu terlapor" value="{{ old('nama_terlapor') }}">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="form-label-tw">Instansi Terlapor <span class="text-red-500">*</span></label>
+                                <input type="text" class="input-field" id="instansi_terlapor" name="instansi_terlapor" placeholder="Nama instansi/lembaga terlapor" value="{{ old('instansi_terlapor') }}">
                             </div>
                             <div class="space-y-1">
                                 <label class="form-label-tw">Jabatan Terlapor <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
-                                <input type="text" class="input-field" id="jabatan_terlapor" name="jabatan_terlapor" placeholder="Jabatan terlapor">
+                                <input type="text" class="input-field" id="jabatan_terlapor" name="jabatan_terlapor" placeholder="Jabatan terlapor" value="{{ old('jabatan_terlapor') }}">
                             </div>
                         </div>
 
@@ -185,19 +228,19 @@
                                         <span class="inline-flex items-center px-3 bg-white border border-r-0 border-slate-200 rounded-l-lg">
                                             <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                                         </span>
-                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_instagram" name="sosmed_instagram" placeholder="@username">
+                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_instagram" name="sosmed_instagram" placeholder="@username" value="{{ old('sosmed_instagram') }}">
                                     </div>
                                     <div class="flex">
                                         <span class="inline-flex items-center px-3 bg-white border border-r-0 border-slate-200 rounded-l-lg">
                                             <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                                         </span>
-                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_facebook" name="sosmed_facebook" placeholder="Nama profil / URL">
+                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_facebook" name="sosmed_facebook" placeholder="Nama profil / URL" value="{{ old('sosmed_facebook') }}">
                                     </div>
                                     <div class="flex">
                                         <span class="inline-flex items-center px-3 bg-white border border-r-0 border-slate-200 rounded-l-lg">
                                             <svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                                         </span>
-                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_x" name="sosmed_x" placeholder="@username">
+                                        <input type="text" class="input-field !rounded-l-none !bg-white" id="sosmed_x" name="sosmed_x" placeholder="@username" value="{{ old('sosmed_x') }}">
                                     </div>
                                 </div>
                             </div>
@@ -246,6 +289,15 @@
                                 <option value="pencucian-uang">Pencucian Uang</option>
                                 <option value="pemerasan">Pemerasan</option>
                                 <option value="nepotisme" data-tooltip="Mengutamakan keluarga/kerabat dalam jabatan">Nepotisme</option>
+                                {{-- @forelse($jenisDugaan as $dugaan)
+                                    <option value="{{ $dugaan['Id'] ?? '' }}"
+                                        @if(!empty($dugaan['Description'] ?? '')) data-tooltip="{{ $dugaan['Description'] ?? '' }}" @endif
+                                        @if(is_array(old('jenis_dugaan')) && in_array($dugaan['Id'] ?? '', old('jenis_dugaan'))) selected @endif>
+                                        {{ $dugaan['Value'] ?? $dugaan['Description'] ?? '' }}
+                                    </option>
+                                @empty
+                                    <option value="" disabled>Data jenis dugaan tidak tersedia</option>
+                                @endforelse --}}
                             </select>
                             <div class="mt-2 text-[11px] text-slate-500 bg-blue-50 p-2 rounded border border-blue-100">
                                 <span class="font-semibold">💡 Penjelasan singkat:</span>
@@ -296,11 +348,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="space-y-1">
                                     <label class="form-label-tw">Proyek / Kegiatan <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
-                                    <input type="text" class="input-field" id="proyek" name="proyek" placeholder="Nama proyek / kegiatan">
+                                    <input type="text" class="input-field" id="proyek" name="proyek" placeholder="Nama proyek / kegiatan" value="{{ old('proyek') }}">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="form-label-tw">Bendahara / Pengelola <span class="font-normal normal-case text-slate-400">(Opsional)</span></label>
-                                    <input type="text" class="input-field" id="nama_trejer" name="nama_trejer" placeholder="Nama pengelola anggaran">
+                                    <input type="text" class="input-field" id="nama_trejer" name="nama_trejer" placeholder="Nama pengelola anggaran" value="{{ old('nama_trejer') }}">
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -308,12 +360,12 @@
                                     <label class="form-label-tw">Anggaran / Nilai <span class="font-normal normal-case text-slate-400">(Estimasi)</span></label>
                                     <div class="flex">
                                         <span class="inline-flex items-center px-3 bg-slate-100 border border-r-0 border-slate-200 rounded-l-lg text-sm font-medium text-slate-500">IDR</span>
-                                        <input type="text" class="input-field !rounded-l-none" id="anggaran" name="anggaran" placeholder="0">
+                                        <input type="text" class="input-field !rounded-l-none" id="anggaran" name="anggaran" placeholder="0" value="{{ old('anggaran') }}">
                                     </div>
                                 </div>
                                 <div class="space-y-1" id="sumberLainnyaField" style="display:none;">
                                     <label class="form-label-tw">Sumber Dana Lainnya</label>
-                                    <input type="text" class="input-field" id="sumber_dana_lainnya" name="sumber_dana_lainnya" placeholder="Sebutkan sumber dana">
+                                    <input type="text" class="input-field" id="sumber_dana_lainnya" name="sumber_dana_lainnya" placeholder="Sebutkan sumber dana" value="{{ old('sumber_dana_lainnya') }}">
                                 </div>
                             </div>
                         </div>
@@ -607,5 +659,122 @@
             closeOnSelect: false
         });
     });
+
+    // AJAX Form Submit
+    $('#formPengaduan').on('submit', function(e) {
+        e.preventDefault();
+
+        // Clear previous messages
+        $('#ajaxAlert').remove();
+        $('.input-error').removeClass('input-error');
+        $('.field-error').remove();
+
+        const $form = $(this);
+        const $submitBtn = $form.find('button[type="submit"]');
+        const originalBtnHtml = $submitBtn.html();
+
+        // Disable button & show loading
+        $submitBtn.prop('disabled', true).html(
+            '<svg class="animate-spin h-5 w-5 mr-2 inline" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Mengirim...'
+        );
+
+        // Build FormData (supports file uploads)
+        const formData = new FormData(this);
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            },
+            success: function(response) {
+                // Show success message
+                showAlert('success', response.message || 'Pengaduan berhasil dikirim.');
+
+                // Reset form
+                $form[0].reset();
+                $('#jenisDugaan').val(null).trigger('change');
+                $('#fileList').empty();
+                $('#identitasFields').hide();
+                $('#anggaranFields').hide();
+                $('#sosmedFields').addClass('hidden');
+
+                // Scroll to top
+                $('html, body').animate({ scrollTop: $form.offset().top - 100 }, 400);
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    // Validation errors
+                    const errors = xhr.responseJSON?.errors || {};
+                    let errorMessages = [];
+                    $.each(errors, function(field, messages) {
+                        errorMessages = errorMessages.concat(messages);
+                        // Highlight field
+                        const $field = $('[name="' + field + '"], [name="' + field + '[]"]');
+                        $field.addClass('input-error');
+                        $field.closest('.space-y-1, div').find('.field-error').remove();
+                        $field.after('<p class="field-error text-xs text-red-500 mt-1">' + messages[0] + '</p>');
+                    });
+                    showAlert('validation', errorMessages);
+                } else {
+                    const msg = xhr.responseJSON?.message || 'Terjadi kesalahan. Silakan coba lagi.';
+                    showAlert('error', msg);
+                }
+                $('html, body').animate({ scrollTop: $form.offset().top - 100 }, 400);
+            },
+            complete: function() {
+                $submitBtn.prop('disabled', false).html(originalBtnHtml);
+            }
+        });
+    });
+
+    function showAlert(type, message) {
+        $('#ajaxAlert').remove();
+
+        let html = '';
+        if (type === 'success') {
+            html = `
+                <div id="ajaxAlert" class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
+                    <span class="material-icons text-green-600 mt-0.5">check_circle</span>
+                    <div>
+                        <p class="text-sm font-semibold text-green-800">Berhasil!</p>
+                        <p class="text-sm text-green-700">${message}</p>
+                    </div>
+                    <button type="button" onclick="this.parentElement.remove()" class="ml-auto text-green-400 hover:text-green-600">
+                        <span class="material-icons text-[18px]">close</span>
+                    </button>
+                </div>`;
+        } else if (type === 'validation') {
+            const items = Array.isArray(message) ? message.map(m => `<li>${m}</li>`).join('') : `<li>${message}</li>`;
+            html = `
+                <div id="ajaxAlert" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div class="flex items-start justify-between">
+                        <p class="text-sm font-semibold text-red-800 mb-2">Mohon perbaiki kesalahan berikut:</p>
+                        <button type="button" onclick="this.closest('#ajaxAlert').remove()" class="text-red-400 hover:text-red-600">
+                            <span class="material-icons text-[18px]">close</span>
+                        </button>
+                    </div>
+                    <ul class="list-disc list-inside text-sm text-red-700 space-y-1">${items}</ul>
+                </div>`;
+        } else {
+            html = `
+                <div id="ajaxAlert" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
+                    <span class="material-icons text-red-600 mt-0.5">error</span>
+                    <div>
+                        <p class="text-sm font-semibold text-red-800">Gagal!</p>
+                        <p class="text-sm text-red-700">${message}</p>
+                    </div>
+                    <button type="button" onclick="this.parentElement.remove()" class="ml-auto text-red-400 hover:text-red-600">
+                        <span class="material-icons text-[18px]">close</span>
+                    </button>
+                </div>`;
+        }
+
+        $(html).insertBefore('#formPengaduan');
+    }
 </script>
 @endsection

@@ -41,6 +41,9 @@
         .input-field-select {
             @apply w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none appearance-none;
         }
+        .input-error {
+            @apply !border-red-400 !ring-2 !ring-red-200;
+        }
         /* Select2 Custom Styling */
         .select2-container--default .select2-selection--multiple {
             background-color: rgb(248 250 252);
